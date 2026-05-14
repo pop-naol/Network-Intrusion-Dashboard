@@ -1,0 +1,41 @@
+# Python virtual environment
+.venv/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# VS Code settings
+.vscode/
+Data
+# OS files
+.DS_Store
+Thumbs.db
+
+# DuckDB temporary files
+*.duckdb
+*.db
+
+# Data files and staging outputs
+Data/staging/
+Data/**/*.csv
+Dashboard/powerbi_data/*.csv
+
+# Python packaging
+*.egg-info/
+build/
+dist/
+
+# Logs
+*.log
+
+# Environment files
+.env
+.env.*
+
+# PySpark notebooks outputs
+**/.ipynb_checkpoints

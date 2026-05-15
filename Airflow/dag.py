@@ -2,28 +2,7 @@ from datetime import datetime, timedelta
 from airflow import DAG
 from airflow.operators.bash import BashOperator
 
-# Directory containing PySpark notebooks
 PYSPARK_DIR = '/opt/airflow/PySpark'
-
-
-def notebook_command(notebook_name):
-    """
-    Generate bash command to execute a Jupyter notebook.
-
-    Args:
-        notebook_name (str): Name of the notebook file.
-
-    Returns:
-        str: Executable bash command.
-    """
-    return (
-        f'echo "Starting {notebook_name} execution..." && '
-        f'jupyter nbconvert --to notebook --execute '
-        f'--ExecutePreprocessor.timeout=600 '
-        f'--inplace {PYSPARK_DIR}/{notebook_name} && '
-        f'echo "{notebook_name} executed successfully."'
-    )
-
 
 default_args = {
     'owner': 'airflow',
@@ -42,23 +21,31 @@ with DAG(
     tags=['etl', 'network', 'security'],
 ) as dag:
 
-    # Extract task
     extract = BashOperator(
         task_id='extract',
-        bash_command=notebook_command('exrtract.ipynb'),
+        bash_command=(
+            f'jupyter nbconvert --to notebook --execute '
+            f'--ExecutePreprocessor.timeout=600 '
+            f'--inplace {PYSPARK_DIR}/exrtract.ipynb'
+        ),
     )
 
-    # Transform task
     transform = BashOperator(
         task_id='transform',
-        bash_command=notebook_command('transform.ipynb'),
+        bash_command=(
+            f'jupyter nbconvert --to notebook --execute '
+            f'--ExecutePreprocessor.timeout=600 '
+            f'--inplace {PYSPARK_DIR}/transform.ipynb'
+        ),
     )
 
-    # Load task
     load = BashOperator(
         task_id='load',
-        bash_command=notebook_command('load.ipynb'),
+        bash_command=(
+            f'jupyter nbconvert --to notebook --execute '
+            f'--ExecutePreprocessor.timeout=600 '
+            f'--inplace {PYSPARK_DIR}/load.ipynb'
+        ),
     )
 
-    # Task pipeline order
     extract >> transform >> load
